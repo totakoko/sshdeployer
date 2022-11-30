@@ -1,15 +1,14 @@
-FROM alpine:3.7
+FROM alpine:3.17
 
-MAINTAINER maxime@dreau.fr
+LABEL maintainer="maxime@dreau.fr"
 
-RUN apk --update --no-cache add openssh-client rsync \
- && mkdir -p ~/.ssh \
- && chmod 700 ~/.ssh
+ENV SSH_FROM_ENV=true
 
-COPY remote.sh /remote
+RUN apk --update --no-cache add openssh-client
 
-RUN chmod +x /remote
+COPY remote.sh /usr/local/bin/remote
+RUN ln -s /usr/local/bin/remote /remote
 
 WORKDIR /
 
-CMD ["/remote"]
+CMD ["remote"]
